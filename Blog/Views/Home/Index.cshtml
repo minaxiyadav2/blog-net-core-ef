@@ -1,0 +1,67 @@
+﻿@model IndexViewModel
+
+@{
+    ViewBag.Title = "Blog Website";
+    ViewBag.Description = "This blog has everything";
+    ViewBag.Keywords = "blog programming travel photography technology";
+}
+
+@*<h2>Home Page</h2>
+    <img src="~/content/static/antique-art-books-1448709.jpg" width="500" />*@
+
+<div class="main-img">
+    <span class="title">Amazing Blog Sites</span>
+</div>
+
+<div class="container">
+    @*<ul>
+            @foreach (var post in Model)
+            {
+            <li>
+                <a asp-controller="Home" asp-action="Post" asp-route-id="@post.Id">
+                    @post.Title
+                </a>
+                -
+                <a asp-controller="Home" asp-action="Edit" asp-route-id="@post.Id">
+                    Edit
+                </a>
+                -
+                <a asp-controller="Home" asp-action="Remove" asp-route-id="@post.Id">
+                    Remove
+                </a>
+            </li>
+            }
+        </ul>*@
+
+    @foreach (var post in Model.Posts)
+    {
+        var image_path = $"/Image/{post.Image}";
+        <a class="post" asp-controller="Home" asp-action="Post" asp-route-id="@post.Id">
+            <img src="@image_path" />
+            <span class="title">
+                @post.Title
+            </span>
+        </a>
+    }
+
+    <div class="pages">
+        @if (Model.PageNumber > 1)
+        {
+            <div><a asp-action="Index" asp-controller="Home" asp-route-category="@Model.Category"
+               asp-route-pageNumber="@(Model.PageNumber - 1)">Previous page</a></div>
+        }
+
+        @for (int i = 1; i <= Model.PageCount; i++)
+        {
+            string activeClass = i == Model.PageNumber ? "active" : "";
+            <a class="@activeClass" asp-action="Index" asp-controller="Home" asp-route-category="@Model.Category"
+               asp-route-pageNumber="@i">@i</a>
+        }
+
+        @if (Model.NextPage)
+        {
+            <a asp-action="Index" asp-controller="Home" asp-route-category="@Model.Category"
+               asp-route-pageNumber="@(Model.PageNumber + 1)">></a>
+        }
+    </div>
+</div>
